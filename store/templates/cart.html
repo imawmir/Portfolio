@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" href="{% url 'index' %}">ARSeyedi</a>
+
+        <!-- Toggler Button for Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links and Buttons -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center">
+                
+                <!-- Inbox Notification Button -->
+                {% if user.is_authenticated %}
+                <li class="nav-item me-3">
+                    <a class="btn btn-outline-light position-relative d-flex align-items-center">
+                        <i class="fas fa-shopping-cart me-2"></i> Cart
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ order_count }}
+                        </span>
+                    </a>
+                </li>
+
+                    <!-- Admin Panel for Superusers -->
+                    {% if user.is_superuser %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-cogs me-1"></i> Admin Panel
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item d-flex align-items-center" href="{% url 'store_products' %}">
+                                    <i class="fas fa-box me-2"></i> Products Management
+                                </a></li>
+                                <li><a class="dropdown-item d-flex align-items-center" href="{% url 'store_users' %}">
+                                    <i class="fas fa-users me-2"></i> Clients Management
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                <!-- Home Link -->
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" href="{% url 'store_main' %}">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Container -->
+<div class="container vh-100 mt-3">
+    <!-- Orders Table Section -->
+    <div class="card bg-dark shadow-lg border-0">
+        <div class="card-header text-white text-center" style="background-color: #585858;">
+            <h3 class="fw-bold">Order Summary</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-hover table-borderless align-middle text-light">
+                <thead class="bg-secondary text-white">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Item Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order_item in order.items.all %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td class="fw-bold">{{ order_item.product.title }}</td>
+                        <td>$ {{ order_item.product.price }}</td>
+                        <td>
+                            <div class="d-flex align-items-center justify-content-center">
+                                <a href="{% url "add_item" order_item.product.pk %}" class="btn btn-outline-success btn-sm me-2"><i class="fas fa-plus"></i></a>
+                                <span class="fw-bold">{{ order_item.quantity }}</span>
+                                <a href="{% url "remove_item" order_item.product.pk %}" class="btn btn-outline-danger btn-sm ms-2"><i class="fas fa-minus"></i></a>
+                            </div>
+                        </td>
+                        <td>$ {{ order_item.final_price }}</td>
+                    </tr>
+                    {% endfor %}
+
+                    {% if order.total_price %}
+                    <tr class="bg-dark text-white">
+                        <td colspan="4" class="text-end fw-bold">Total Order Price</td>
+                        <td class="fw-bold text-success"><i class="fas fa-dollar-sign"></i> {{ order.total_price }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            <a href="#" class="btn btn-success btn-lg me-3"><i class="fas fa-check-circle me-1"></i> Checkout</a>
+                            <a href="#" class="btn btn-primary btn-lg"><i class="fas fa-shopping-cart me-1"></i> Continue Shopping</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Optional CSS for Custom Styling -->
+<style>
+    .card {
+        border-radius: 12px;
+    }
+
+    .card-header {
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .btn-outline-success, .btn-outline-danger {
+        border-radius: 50%;
+        padding: 6px;
+        font-size: 0.9rem;
+    }
+
+    .btn-lg {
+        padding: 12px 24px;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .fw-bold {
+        font-weight: 600;
+    }
+
+    .text-success {
+        color: #28a745 !important;
+    }
+
+    .text-white {
+        color: #f8f9fa !important;
+    }
+</style>
+
+<!-- Font Awesome for Icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+
+<!-- CSS for custom styling -->
+<style>
+    /* Navbar Styles */
+    .navbar {
+        background-color: rgba(0, 0, 0, 0.8); /* Transparent effect */
+    }
+
+    /* Badge Styling */
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.4em 0.5em;
+    }
+
+    /* Dropdown Menu Style */
+    .dropdown-menu {
+        background-color: #333;
+        border: none;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Links Styling */
+    .nav-link, .dropdown-item {
+        color: #ddd !important;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-link:hover, .dropdown-item:hover {
+        color: #fff !important;
+        transform: scale(1.05);
+    }
+
+    /* Icon Color */
+    .nav-link i, .dropdown-item i {
+        color: #bbb;
+        transition: color 0.2s ease;
+    }
+
+    .nav-link:hover i, .dropdown-item:hover i {
+        color: #fff;
+    }
+</style>
+
+<!-- Font Awesome (Optional for Icons) -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+{% endblock %} 

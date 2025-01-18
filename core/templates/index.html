@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARSeyedi</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href={% static 'assets/favicon.ico' %} />
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href={% static "css/styles.css" %}>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <!-- Left: Amirreza -->
+            <a class="navbar-brand" href="#">ARSeyedi</a>
+
+            <!-- Right: Buttons and Dropdown -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    
+                    <!-- Skills Button -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">Skills</a>
+                    </li>
+                    <!-- Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Work Samples
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="navbarDropdown" style="border-radius: 8px; background-color: #f8f9fa; min-width: 250px;">
+                            {% for ws in worksamples %}
+                                <li class="d-flex align-items-center p-2 mb-1" style="border-bottom: 1px solid #243b55;">
+                                    <a class="dropdown-item d-flex align-items-center justify-content-between text-dark" href="{{ ws.url }}" style="text-decoration: none;">
+                                        <!-- Work Sample Image -->
+                                        <img src="{{ ws.image.url }}" alt="{{ ws.title }}" class="rounded-circle me-3" style="height: 50px; width: 50px; object-fit: cover; border: 1px solid #ccc;">
+                        
+                                        <!-- Work Sample Title -->
+                                        <span style="font-weight: 500; font-size: 1rem; flex-grow: 1;">{{ ws.title }}</span>
+                                        
+                                        <!-- Optional Icon or Info -->
+                                        <i class="fas fa-arrow-right ms-3" style="color: #3498db;"></i>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        
+                    </li>
+                    
+                    {% if user.is_authenticated %}
+                        <!-- User Profile Photo Dropdown -->
+                        <li class="nav-item dropdown ms-3">
+                            <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ client.image.url }}" alt="" class="rounded-circle" style="height: 40px; width: 40px; object-fit: cover; border: 2px solid #ddd;">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="border-radius: 8px;">
+                                <li><a class="dropdown-item" href="{% url "profile" user.id %}">{{ client.user.username }}</a></li>
+                                {% if user.is_superuser%}
+                                    <li><a class="dropdown-item" href="{% url "store_users" %}">Users</a></li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <!-- Login Button -->
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-light text-dark px-3 py-1 mx-1 rounded-pill shadow-sm" href="{% url 'login' %}" style="background-color: #48c9b0; border-color: #48c9b0;">
+                                <i class="fas fa-sign-in-alt me-1"></i>Login
+                            </a>
+                        </li>
+                        
+                        <!-- Register Button -->
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-light text-dark px-3 py-1 mx-1 rounded-pill shadow-sm" href="{% url 'register' %}" style="background-color: #3498db; border-color: #3498db;">
+                                <i class="fas fa-user-plus me-1"></i>Register
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+
+        <!-- Header Section -->
+        <header class="bg-dark text-white text-center py-5" style="background-image: url({% static "assets/background.jpg" %}); background-size: cover;">
+            <div class="container">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <h5 class="text-center mb-4 alert alert-success" style="color: #4a4a4a;">{{ message }}</h5>
+                    {% endfor %}
+                {% endif %}
+
+                <h1 class="display-4">Django Developer</h1>
+                <div class="mt-4">
+                    <a href="#worksamples" class="btn btn-success btn-lg mx-2">Work Samples</a>
+                    <a href="#details" class="btn btn-outline-light btn-lg mx-2">Contact Me</a>
+                </div>
+            </div>
+        </header>
+
+        <!-- About Myself Section -->
+        <section class="py-5 bg-dark text-white text-center">
+            <div class="container mt-4">
+                <h2 class="mb-4">About <span class="text-success">MySelf</span></h2>
+                <h5>Hello, I am <b class="text-success">SeyedAmirreza Seyedi</b></h5>
+
+                <p>I am a passionate and dedicated web developer with <b class="text-success">over 2</b> years of experience in designing and building responsive,
+                    user-friendly websites and applications. My expertise lies in frontend development using technologies like <b class="text-success">
+                        HTML, CSS</b> and <b class="text-success">Bootstrap</b>
+                        along with backend development using <b class="text-success">Python, Django</b> and <b class="text-success">MySQL</b>.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="py-5 text-center text-white bg-secondary" id="details">
+            <div class="container mt-4">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <img src="{% static 'assets/Amirreza_seyyedi.jpg' %}" alt="Portrait" class="img-fluid rounded">
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="mb-4">Contact <span class="text-success">Me</span></h3>
+                        <ul class="list-unstyled">
+                            <li><strong>Name:</strong> SeyedAmirreza Seyedi</li>
+                            <li><strong>Age:</strong> 22</li>
+                            <li><strong>Address:</strong> Ardabil, Iran</li>
+                            <li><strong>Phone Number:</strong> +989144583740</li>
+                            <li><strong>Email:</strong> amirreza81seyedi@gmail.com</li>
+                        </ul>
+                        <a href="#" class="btn btn-success mt-4">Download CV</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="py-5 text-center bg-dark text-white" id="skills">
+            <div class="container mt-4">
+                <h2>My <span class="text-success">Skills</span></h2>
+                <!-- Skills Section -->
+                <div class="row">
+                    <div class="col-md-6 mx-auto">
+                        <div class="my-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 50 50">
+                                <path d="M50,24.939C50,28.564,47.573,31,43.961,31c-1.332,0-2.499-0.333-3.441-0.934c-0.151,0.843-0.414,1.576-0.867,2.258 C38.847,33.545,37.197,35,33.909,35c-1.244,0-2.332-0.192-3.423-0.605l-1.292-0.489V31c0,0-10.791,0-11.29,0 c-0.966,0-1.734-0.148-2.36-0.384c-0.099,0.29-0.208,0.573-0.352,0.846c-0.618,1.2-1.471,1.988-2.945,2.721l-0.867,0.431 l-0.876-0.413L8.169,33.1l-5.267-2.924l0.011-0.001C1.047,29.198,0,27.392,0,24.944c0-3.413,2.25-5.869,5.561-6.197V17v-2h10.456v2 v2.397C16.874,19.14,17.747,19,18.662,19c1.366,0,2.313,0.329,2.983,0.772l0.528-0.144C23.764,19.194,25.077,19,26.431,19 c1.788,0,3.16,0.497,4.081,1.479c0.132,0.141,0.247,0.284,0.353,0.43C32.094,19.77,33.992,19,36.758,19 c1.188,0,2.322,0.119,3.677,0.387l0.877,0.173C42.116,19.2,43.038,19,44.059,19C47.612,19,50,21.387,50,24.939z M7.561,17v3.839 c-0.376-0.097-0.825-0.13-1.233-0.13C3.697,20.709,2,22.376,2,24.944C2,27.609,3.6,28.997,6.675,29 c1.027,0,2.036-0.097,3.325-0.343V17H7.561L7.561,17z M7.561,22.865v4.044c-0.36,0.049-0.724,0.065-1.003,0.065 c-1.289,0-1.992-0.739-1.992-2.078c0-1.375,0.735-2.16,2.008-2.16C6.885,22.736,7.266,22.768,7.561,22.865L7.561,22.865z M11.487,21v4.916c0,2.169-0.113,2.994-0.473,3.706c-0.343,0.696-0.881,1.153-1.992,1.669l2.336,1.101 c1.111-0.552,1.649-1.052,2.057-1.845C13.852,29.722,14,28.765,14,26.776V21H11.487z M11.5,19.558h2.517V17H11.5V19.558z M15.496,23.596c0.933-0.486,1.928-0.739,2.812-0.739c0.604,0,0.822,0.159,0.822,0.598v0.533c-2.935,0.25-4.13,1.035-4.13,2.734 C15,28.293,15.899,29,17.904,29c0.992,0,2.344-0.112,3.416-0.268v-4.918c0-1.007-0.065-1.477-0.265-1.839 C20.698,21.33,19.891,21,18.662,21c-1.103,0-2.113,0.221-3.169,0.723L15.496,23.596z M19.237,25.572v1.621 c-0.465,0.078-0.791,0.109-1.148,0.109c-0.653,0-0.949-0.221-0.949-0.692C17.14,25.98,17.655,25.728,19.237,25.572L19.237,25.572z M22.7,29H25v-5.843c0.477-0.146,0.843-0.177,1.168-0.177c0.847,0,1.243,0.352,1.243,1.295V29h2.29v-4.823 c0-1.229-0.157-1.805-0.649-2.331C28.529,21.288,27.648,21,26.431,21c-1.171,0-2.327,0.174-3.731,0.557V29z M31.195,30.268v2.256 C32.077,32.858,32.927,33,33.909,33c1.931,0,3.29-0.589,4.075-1.778c0.538-0.812,0.72-1.794,0.72-3.889v-0.667 c-0.017-0.334-0.017-0.667-0.033-1.001l-0.016-1.334L38.623,23.3v-0.255c0.506,0.047-0.11-0.06,0.561,0.066l0.863-1.762 C38.837,21.11,37.838,21,36.758,21C33.079,21,31,22.57,31,25.348c0,2.237,1.405,3.65,3.613,3.65c0.652,0,1.145-0.098,1.635-0.334 v0.047c0,1.554-0.704,2.206-2.355,2.206C32.959,30.917,32.077,30.712,31.195,30.268L31.195,30.268z M36.2,23.158l0.017,0.809 l0.016,1.126c0,0.334,0.017,0.651,0.017,0.938v0.667v0.177c-0.324,0.095-0.604,0.157-0.947,0.157c-1.113,0-1.735-0.699-1.735-1.919 c0-0.856,0.311-1.46,0.914-1.793c0.393-0.239,0.967-0.365,1.457-0.349h0.182H36.2V23.158z M40,25.077 C40,27.497,41.511,29,43.961,29C46.443,29,48,27.435,48,24.939C48,22.504,46.505,21,44.059,21C41.561,21,40.004,22.565,40,25.077z M44.008,27.075c-0.952,0-1.511-0.759-1.511-2.078c0-1.319,0.556-2.078,1.527-2.078c0.939,0,1.478,0.775,1.478,2.078 C45.503,26.316,44.948,27.075,44.008,27.075L44.008,27.075z"></path>
+                            </svg>
+                            <div class="progress">
+                                <div class="progress-bar bg-success text-dark" role="progressbar" style="width: 65%;" aria-valuenow="65"
+                                    aria-valuemin="0" aria-valuemax="100">65%</div>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 48 48">
+                                <path fill="#0277BD" d="M24.047,5c-1.555,0.005-2.633,0.142-3.936,0.367c-3.848,0.67-4.549,2.077-4.549,4.67V14h9v2H15.22h-4.35c-2.636,0-4.943,1.242-5.674,4.219c-0.826,3.417-0.863,5.557,0,9.125C5.851,32.005,7.294,34,9.931,34h3.632v-5.104c0-2.966,2.686-5.896,5.764-5.896h7.236c2.523,0,5-1.862,5-4.377v-8.586c0-2.439-1.759-4.263-4.218-4.672C27.406,5.359,25.589,4.994,24.047,5z M19.063,9c0.821,0,1.5,0.677,1.5,1.502c0,0.833-0.679,1.498-1.5,1.498c-0.837,0-1.5-0.664-1.5-1.498C17.563,9.68,18.226,9,19.063,9z"></path><path fill="#FFC107" d="M23.078,43c1.555-0.005,2.633-0.142,3.936-0.367c3.848-0.67,4.549-2.077,4.549-4.67V34h-9v-2h9.343h4.35c2.636,0,4.943-1.242,5.674-4.219c0.826-3.417,0.863-5.557,0-9.125C41.274,15.995,39.831,14,37.194,14h-3.632v5.104c0,2.966-2.686,5.896-5.764,5.896h-7.236c-2.523,0-5,1.862-5,4.377v8.586c0,2.439,1.759,4.263,4.218,4.672C19.719,42.641,21.536,43.006,23.078,43z M28.063,39c-0.821,0-1.5-0.677-1.5-1.502c0-0.833,0.679-1.498,1.5-1.498c0.837,0,1.5,0.664,1.5,1.498C29.563,38.32,28.899,39,28.063,39z"></path>
+                            </svg>
+                            <div class="progress">
+                                <div class="progress-bar bg-success text-dark" role="progressbar" style="width: 75%;" aria-valuenow="75"
+                                    aria-valuemin="0" aria-valuemax="100">75%</div>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 48 48">
+                                <linearGradient id="eDMgMixeD6M6EYSYBuJ8ya_9nLaR5KFGjN0_gr1" x1="9.8" x2="11.081" y1="25.236" y2="36.899" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#058f92"></stop><stop offset=".5" stop-color="#038489"></stop><stop offset="1" stop-color="#026d71"></stop></linearGradient><path fill="url(#eDMgMixeD6M6EYSYBuJ8ya_9nLaR5KFGjN0_gr1)" d="M0.002,35.041h1.92v-7.085l2.667,6.057c0.329,0.755,0.779,1.022,1.662,1.022 s1.315-0.267,1.644-1.022l2.667-5.902v6.93h1.92v-7.258c0-0.697-0.277-1.035-0.849-1.209c-1.367-0.43-2.285-0.059-2.7,0.872 l-2.735,6.16l-2.649-6.16c-0.398-0.93-1.332-1.302-2.7-0.872C0.277,26.748,0,27.085,0,27.782v7.258H0.002z M13.441,29.281h1.92 v4.055c-0.015,0.2,0.064,0.731,0.99,0.745c0.472,0.008,2.821,0,2.85,0v-4.8h1.92c0.008,0,0,5.968,0,5.993 c0.01,1.472-1.828,1.662-2.673,1.687h-5.006v-0.96c0.01,0,4.787,0.001,4.801,0c1.088-0.115,0.959-0.714,0.959-0.896v-0.064H16.19 c-1.67-0.015-2.735-0.751-2.747-1.59C13.441,33.373,13.479,29.317,13.441,29.281z"></path><linearGradient id="eDMgMixeD6M6EYSYBuJ8yb_9nLaR5KFGjN0_gr2" x1="34.224" x2="35.101" y1="25.644" y2="35.217" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#ff9c0f"></stop><stop offset=".813" stop-color="#d67e00"></stop></linearGradient><path fill="url(#eDMgMixeD6M6EYSYBuJ8yb_9nLaR5KFGjN0_gr2)" d="M22.081,35.041h4.807c0.63,0,1.242-0.132,1.728-0.36c0.81-0.372,1.144-0.875,1.144-1.536 v-1.368c0-1.476-1.83-1.536-2.88-1.536h-1.92c-0.755,0-0.87-0.456-0.96-0.96v-0.96c0.09-0.384,0.258-0.9,0.923-0.96 c0.773,0,4.836,0,4.836,0v-0.96h-4.566c-0.755,0-3.114,0.09-3.114,1.92v1.187c0,0.84,0.738,1.524,2.34,1.692 c0.18,0.012,0.36,0.024,0.539,0.024c0,0,1.866-0.036,1.92-0.024c1.08,0,0.96,0.84,0.96,0.96v0.96c0,0.132-0.03,0.96-0.971,0.96 c-0.072,0-4.789,0-4.789,0V35.041z M40.32,33.08c0,1.159,0.655,1.809,2.392,1.939c0.162,0.011,0.325,0.021,0.488,0.021H48v-0.96 h-4.435c-0.991,0-1.325-0.416-1.325-1.011v-6.669h-1.92V33.08z M30.704,33.121v-4.8c0-1.02,0.5-1.724,1.916-1.92h0.672h3.447h0.525 c1.416,0.196,2.08,0.899,2.08,1.92v4.782c0,0.827-0.215,1.271-0.916,1.559L39.916,36h-2.16l-1.07-0.96h-1.257l-2.136,0.012 c-0.309,0-0.635-0.043-0.993-0.141C31.226,34.618,30.704,34.054,30.704,33.121z M32.624,33.121c0.098,0.467,0.473,0.96,1.14,0.96 h1.864l-1.068-0.96h2.175l0.519,0.482c0,0,0.186-0.152,0.186-0.482c0-0.33-0.016-4.8-0.016-4.8c-0.098-0.434-0.538-0.96-1.188-0.96 h-2.471c-0.749,0-1.14,0.548-1.14,1.058L32.624,33.121L32.624,33.121z"></path><linearGradient id="eDMgMixeD6M6EYSYBuJ8yc_9nLaR5KFGjN0_gr3" x1="35.029" x2="40.355" y1="11.716" y2="26.75" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#058f92"></stop><stop offset=".5" stop-color="#038489"></stop><stop offset="1" stop-color="#026d71"></stop></linearGradient><path fill="url(#eDMgMixeD6M6EYSYBuJ8yc_9nLaR5KFGjN0_gr3)" d="M46.199,25.389c-1.031-0.028-1.818,0.068-2.491,0.351c-0.191,0.081-0.496,0.083-0.528,0.323 c0.105,0.11,0.121,0.275,0.205,0.41c0.16,0.26,0.432,0.609,0.674,0.791c0.265,0.2,0.538,0.414,0.821,0.587 c0.504,0.307,1.067,0.483,1.553,0.791c0.286,0.181,0.57,0.411,0.85,0.615c0.138,0.102,0.23,0.259,0.41,0.323 c0-0.01,0-0.019,0-0.029c-0.094-0.12-0.119-0.285-0.205-0.411c-0.127-0.127-0.254-0.254-0.381-0.381 c-0.372-0.494-0.846-0.929-1.348-1.289c-0.401-0.288-1.298-0.677-1.466-1.143c-0.01-0.01-0.019-0.019-0.03-0.03 c0.284-0.032,0.617-0.135,0.879-0.205c0.441-0.118,0.834-0.087,1.289-0.205c0.205-0.059,0.41-0.117,0.615-0.176 c0-0.039,0-0.078,0-0.117c-0.23-0.236-0.395-0.548-0.645-0.762c-0.657-0.559-1.373-1.117-2.11-1.583 c-0.409-0.258-0.915-0.426-1.348-0.645c-0.146-0.074-0.402-0.112-0.498-0.234c-0.228-0.29-0.351-0.659-0.527-0.996 c-0.368-0.708-0.73-1.482-1.055-2.227c-0.223-0.508-0.368-1.01-0.645-1.466c-1.331-2.188-2.764-3.509-4.982-4.807 c-0.472-0.276-1.041-0.385-1.642-0.528c-0.323-0.019-0.645-0.039-0.968-0.059c-0.197-0.083-0.401-0.323-0.587-0.44 c-0.735-0.465-2.621-1.475-3.165-0.147c-0.344,0.838,0.514,1.656,0.821,2.081c0.215,0.298,0.491,0.632,0.645,0.968 c0.101,0.22,0.119,0.441,0.205,0.674c0.213,0.574,0.55,1.228,0.826,1.759c0.139,0.269,0.293,0.551,0.469,0.791 c0.108,0.147,0.293,0.212,0.323,0.44c-0.181,0.253-0.191,0.646-0.293,0.968c-0.458,1.445-0.285,3.24,0.381,4.308 c0.204,0.328,0.686,1.032,1.348,0.762c0.579-0.236,0.45-0.967,0.615-1.612c0.037-0.146,0.014-0.253,0.088-0.351 c0,0.01,0,0.019,0,0.03c0.176,0.351,0.351,0.704,0.528,1.055c0.391,0.629,1.084,1.286,1.67,1.73 c0.304,0.23,0.544,0.628,0.938,0.762c0-0.01,0-0.019,0-0.03c-0.01,0-0.019,0-0.03,0c-0.076-0.119-0.196-0.168-0.293-0.264 c-0.229-0.225-0.485-0.504-0.674-0.762c-0.534-0.725-1.006-1.519-1.436-2.345c-0.205-0.395-0.384-0.829-0.557-1.231 c-0.067-0.155-0.066-0.389-0.205-0.469c-0.19,0.294-0.468,0.532-0.615,0.879c-0.234,0.555-0.265,1.233-0.351,1.934 c-0.052,0.018-0.029,0.006-0.059,0.029c-0.408-0.099-0.552-0.518-0.704-0.879c-0.384-0.912-0.455-2.38-0.117-3.429 c0.087-0.272,0.482-1.127,0.323-1.378c-0.076-0.251-0.328-0.396-0.468-0.587c-0.175-0.236-0.348-0.548-0.469-0.821 c-0.314-0.711-0.612-1.538-0.943-2.257c-0.158-0.344-0.425-0.691-0.645-0.996c-0.243-0.338-0.516-0.587-0.704-0.996 c-0.067-0.145-0.158-0.378-0.059-0.528c0.032-0.101,0.076-0.143,0.176-0.176c0.17-0.132,0.643,0.043,0.821,0.117 c0.47,0.195,0.862,0.381,1.26,0.645c0.191,0.127,0.384,0.372,0.615,0.44c0.088,0,0.176,0,0.264,0 c0.413,0.095,0.875,0.03,1.26,0.147c0.682,0.207,1.292,0.529,1.846,0.879c1.69,1.067,3.071,2.585,4.016,4.397 c0.152,0.292,0.218,0.57,0.351,0.879c0.27,0.624,0.611,1.266,0.879,1.876c0.268,0.609,0.53,1.223,0.909,1.73 c0.2,0.266,0.97,0.409,1.319,0.557c0.245,0.104,0.647,0.211,0.879,0.351c0.444,0.268,0.874,0.587,1.289,0.879 C45.528,24.803,46.167,25.124,46.199,25.389z"></path><path fill="#00796b" d="M33.098,14.223c-0.215-0.004-0.367,0.023-0.528,0.059c0,0.01,0,0.019,0,0.03c0.01,0,0.019,0,0.03,0 c0.103,0.21,0.283,0.347,0.41,0.528c0.098,0.205,0.195,0.41,0.293,0.615c0.01-0.01,0.019-0.019,0.029-0.029 c0.181-0.128,0.265-0.332,0.264-0.645c-0.073-0.077-0.084-0.173-0.147-0.264C33.365,14.394,33.203,14.325,33.098,14.223z"></path>
+                            </svg>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning text-dark" role="progressbar" style="width: 50%;" aria-valuenow="50"
+                                    aria-valuemin="0" aria-valuemax="100">50%</div>
+                            </div>
+                        </div>
+
+
+                        <div class="my-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 48 48">
+                                <path fill="#6c19ff" d="M6.391,10.671c-0.085-2.448,1.822-4.706,4.401-4.706h26.42c2.578,0,4.486,2.258,4.401,4.706	c-0.082,2.352,0.024,5.398,0.791,7.882c0.769,2.492,2.066,4.067,4.19,4.269v2.295c-2.124,0.202-3.421,1.777-4.19,4.269	c-0.767,2.484-0.873,5.53-0.791,7.882c0.085,2.448-1.822,4.706-4.401,4.706h-26.42c-2.578,0-4.486-2.258-4.4-4.706	c0.082-2.352-0.025-5.398-0.791-7.882c-0.769-2.492-2.069-4.067-4.194-4.269v-2.295c2.124-0.202,3.425-1.777,4.194-4.269	C6.367,16.07,6.473,13.023,6.391,10.671z"></path><linearGradient id="Is-EGaxKcc0Cic9QMqyzGa_EzPCiQUqWWEa_gr1" x1="17.846" x2="27.078" y1="-147.541" y2="-163.153" gradientTransform="matrix(1 0 0 -1 0 -132)" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff"></stop><stop offset="1" stop-color="#f1e5fc"></stop></linearGradient><path fill="url(#Is-EGaxKcc0Cic9QMqyzGa_EzPCiQUqWWEa_gr1)" d="M25.042,34.016c4.366,0,6.997-2.138,6.997-5.664c0-2.665-1.877-4.595-4.665-4.9v-0.111	c2.048-0.333,3.655-2.235,3.655-4.359c0-3.026-2.389-4.997-6.03-4.997h-8.192v20.031H25.042z M19.994,16.525h4.238	c2.304,0,3.612,1.027,3.612,2.887c0,1.985-1.522,3.096-4.281,3.096h-3.57V16.525z M19.994,31.475v-6.594h4.21	c3.015,0,4.579,1.11,4.579,3.276c0,2.165-1.522,3.318-4.394,3.318H19.994z"></path>
+                            </svg>
+                            <div class="progress">
+                                <div class="progress-bar bg-success text-dark" role="progressbar" style="width: 80%;" aria-valuenow="80"
+                                    aria-valuemin="0" aria-valuemax="100">80%</div>
+                            </div>
+                        </div>
+
+                        <div class="my-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 48 48">
+                                <path fill="#E65100" d="M41,5H7l3,34l14,4l14-4L41,5L41,5z"></path><path fill="#FF6D00" d="M24 8L24 39.9 35.2 36.7 37.7 8z"></path><path fill="#FFF" d="M24,25v-4h8.6l-0.7,11.5L24,35.1v-4.2l4.1-1.4l0.3-4.5H24z M32.9,17l0.3-4H24v4H32.9z"></path><path fill="#EEE" d="M24,30.9v4.2l-7.9-2.6L15.7,27h4l0.2,2.5L24,30.9z M19.1,17H24v-4h-9.1l0.7,12H24v-4h-4.6L19.1,17z"></path>
+                            </svg>
+                            <div class="progress">
+                                <div class="progress-bar bg-success text-dark" role="progressbar" style="width: 90%;" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100">90%</div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="my-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="50" height="50" viewBox="0 0 48 48">
+                                <linearGradient id="TQDriqswrKwPOniLrPT12a_7gdY5qNXaKC0_gr1" x1="16.33" x2="32.293" y1="-2.748" y2="41.109" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#2aa4f4"></stop><stop offset="1" stop-color="#007ad9"></stop></linearGradient><path fill="url(#TQDriqswrKwPOniLrPT12a_7gdY5qNXaKC0_gr1)" d="M7.192,7.176l2.627,29.77c0.109,1.237,0.97,2.28,2.164,2.621l10.643,3.041	c0.898,0.257,1.849,0.257,2.747,0l10.643-3.041c1.194-0.341,2.055-1.383,2.164-2.621l2.627-29.77C40.911,6.006,39.99,5,38.816,5	H9.184C8.01,5,7.089,6.006,7.192,7.176z"></path><path fill="#35c1f1" d="M24,8v31.9l9.876-2.822c0.797-0.228,1.371-0.924,1.443-1.749l2.286-26.242	C37.656,8.502,37.196,8,36.609,8H24z"></path><path fill="#fff" d="M33.1,13H24v4h4.9l-0.3,4H24v4h4.4l-0.3,4.5L24,30.9v4.2l7.9-2.6L32.6,21l0,0L33.1,13z"></path><path fill="#d6e0e9" d="M24,13v4h-8.9l-0.3-4H24z M19.4,21l0.2,4H24v-4H19.4z M19.8,27h-4l0.3,5.5l7.9,2.6v-4.2l-4.1-1.4	L19.8,27z"></path><path d="M33.1,13l-0.5,8l-0.7,11.5L24,35.1l-7.9-2.6L15.8,27h4l0.1,2.5l4.1,1.4l4.1-1.4l0.3-4.5H24h-4.4l-0.2-4H24h4.6l0.3-4H24 h-8.9l-0.3-4H24H33.1 M34.164,12H33.1H24h-9.2h-1.078l0.081,1.075l0.3,4L14.172,18H15.1H24h3.822l-0.15,2H24h-4.6h-1.051 l0.052,1.05l0.2,4L18.649,26H15.8h-1.056l0.058,1.054l0.3,5.5l0.037,0.682l0.649,0.214l7.9,2.6L24,36.153l0.313-0.103l7.9-2.6 l0.644-0.212l0.041-0.677l0.7-11.5l0.5-7.998L34.164,12L34.164,12z M20.761,26H24h3.331l-0.185,2.769L24,29.843l-3.128-1.068 l-0.073-1.815L20.761,26L20.761,26z" opacity=".05"></path><path d="M33.1,13l-0.5,8l-0.7,11.5L24,35.1l-7.9-2.6L15.8,27h4l0.1,2.5l4.1,1.4l4.1-1.4l0.3-4.5H24h-4.4l-0.2-4H24h4.6l0.3-4H24 h-8.9l-0.3-4H24H33.1 M33.632,12.5H33.1H24h-9.2h-0.539l0.04,0.537l0.3,4l0.035,0.463H15.1H24h4.361l-0.225,3H24h-4.6h-0.526 l0.026,0.525l0.2,4l0.024,0.475H19.6H24h3.866l-0.242,3.634L24,30.372l-3.614-1.234L20.3,26.98L20.28,26.5H19.8h-4h-0.528 l0.029,0.527l0.3,5.5l0.019,0.341l0.324,0.107l7.9,2.6L24,35.626l0.156-0.051l7.9-2.6l0.322-0.106l0.021-0.339l0.7-11.5l0.5-7.999 L33.632,12.5L33.632,12.5z" opacity=".07"></path>
+                            </svg>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning text-dark" role="progressbar" style="width: 50%;" aria-valuenow="50"
+                                    aria-valuemin="0" aria-valuemax="100">50%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Work Samples -->
+        <section class="text-center py-5" id="worksamples" style="background-color: #222;">
+            <h2 class="text-light mt-4 mb-4">Work <span class="text-success">Samples</span></h2>
+            <div class="container">
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+                    {% for ws in worksamples %}
+                        <div class="col mt-3">
+                            <div class="card h-100 shadow-lg border-0" style="border-radius: 10px; overflow: hidden;">
+                                <img class="card-img-top" src="{{ ws.image.url }}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title text-dark fw-bold">{{ ws.title }}</h5>
+                                    <p class="card-text text-muted flex-grow-1">{{ ws.description }}</p>
+                                    <a href="{{ ws.url }}" class="btn btn-success mt-3">More...</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        
+
+    {% endblock%}
+    
+
+
+    <!-- Footer Section -->
+    <footer class="py-4 bg-dark text-center text-white">
+        <div class="container">
+            <div class="social-links">
+                <a href="#" class="text-white mx-2"><i class="fab fa-linkedin"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-white mx-2"><i class="fab fa-telegram"></i></a>
+            </div>
+            
+            <p>© 2024 Amirreza Seyedi. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies (optional) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

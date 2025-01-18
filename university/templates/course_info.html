@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% block content %}
+<html lang="en" dir="rtl">
+<head>
+    <style>
+        .table-container {
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        thead {
+            top: 0;
+        }
+    </style>
+</head>
+
+<!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <!-- Left: Amirreza -->
+            <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+            <!-- Right: Buttons and Dropdown -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'courses' %}">دوره ها</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">ارتباط با ما</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% for course in courses %}
+        <div class="text-center mt-3">
+            <img src="{{ course.image.url }}" class="rounded img-fluid" alt="IMAGE NOT FOUND!">
+        </div>
+
+        <p class="h1 mt-5">اطلاعات دوره {{ course.title }}</p>
+        <p class="h3 mt-5">{{ course.description }}</p>
+        <p class="h5 mt-4">تاریخ شروع: {{ course.start_date }}</p>
+        <p class="h5 mt-4">تاریخ پایان: {{ course.end_date }}</p>
+        <a class="btn btn-danger mt-1" href="{% url 'course_delete' course.id %}">حذف دوره</a>
+        <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#courseEdit">ویرایش</button>
+
+        <div
+              class="modal fade"
+              id="courseEdit"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+            <!-- modal-dialog -->
+            <div class="modal-dialog">
+            <!-- modal-content -->
+            <div class="modal-content">
+            <!-- modal-header -->
+            <div class="modal-header">
+            <!-- Close modal button -->
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <!-- modal-body -->
+                    <form class="modal-body text-dark" action="{% url 'course_update' course.id %}" method="post"
+                          enctype="multipart/form-data">
+                      <p class="fs-5">لطفا تغییرات را اعمال کنید</p>
+                      {% csrf_token %}
+                      {% for course in courses %}
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="title" value="{{ course.title }}" required>
+                            <label for="floatingTextareaDisabled">عنوان</label>
+                          </div>
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="description" value="{{ course.description }}" required>
+                            <label for="floatingTextareaDisabled">توضیحات</label>
+                          </div>
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="start" value="{{ course.start_date }}" required>
+                            <label for="floatingTextarea2Disabled">تاریخ شروع</label>
+                          </div>
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="end" value={{ course.end_date }} required>
+                            <label for="floatingTextareaDisabled">تاریخ پایان</label>
+                          </div>
+                          <div class="mb-3">
+                            <!-- نمایش تصویر پیش‌فرض -->
+                            <img id="imagePreview" src="{{ course.image.url }}" alt="Default Image" width="200" class="mb-2">
+
+                            <!-- ورودی فایل -->
+                            <input type="file" class="form-control" name="image" id="imageUpload" accept="image/*">
+
+                          </div>
+                      {% endfor %}
+                      <!-- modal-footer -->
+                    <div class="modal-footer">
+                      <!-- Actions  -->
+                      <button
+                        type="button"
+                        class="btn btn-danger"
+                        data-bs-dismiss="modal"
+                      >
+                        لغو
+                      </button>
+                      <button type="submit" class="btn btn-success">
+                        ویرایش
+                      </button>
+                    </div>
+
+                    </form>
+
+                  </div>
+                </div>
+              </div>
+        {% endfor %}
+
+    <div class="table-container">
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr class="text-light">
+                    <th scope="col">نام</th>
+                    <th scope="col">نام خانوادگی</th>
+                    <th scope="col">شماره دانشجویی</th>
+                    <th scope="col">شماره تلفن</th>
+                    <th scope="col">رشته</th>
+                    <th scope="col">تاریخ ثبت نام</th>
+                    <th scope="col">عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr class="text-light">
+                        <td>{{ student.firstname }}</td>
+                        <td>{{ student.lastname }}</td>
+                        <td class="h5">{{ student.student_number }}</td>
+                        <td>{{ student.phone }}</td>
+                        <td>{{ student.major }}</td>
+                        <td>{{ student.enrolled_at }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary mt-1" data-bs-toggle="modal" data-bs-target="#studentEdit{{ student.id }}">ویرایش</button>
+                            <a class="btn btn-danger" href="{% url 'student_delete' student.id %}">حذف</a>
+                        </td>
+                    </tr>
+
+                    <!-- Modal برای ویرایش هر دانش‌آموز -->
+                    <div class="modal fade" id="studentEdit{{ student.id }}" tabindex="-1" aria-labelledby="exampleModalLabel{{ student.id }}" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form class="modal-body text-dark" action="{% url 'student_update' student.id %}" method="post" enctype="multipart/form-data">
+                                    <p class="fs-5 text-dark">لطفا تغییرات را اعمال کنید</p>
+                                    {% csrf_token %}
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="firstname" value="{{ student.firstname }}" required>
+                                        <label class="text-dark" for="floatingTextareaDisabled">نام</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="lastname" value="{{ student.lastname }}" required>
+                                        <label class="text-dark" for="floatingTextareaDisabled">نام خانوادگی</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="student_number" value="{{ student.student_number }}" required>
+                                        <label class="text-dark" for="floatingTextarea2Disabled">شماره دانشجویی</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="phone" value="{{ student.phone }}" required>
+                                        <label class="text-dark" for="floatingTextareaDisabled">شماره تلفن</label>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control" name="major" value="{{ student.major }}" required>
+                                        <label class="text-dark" for="floatingTextareaDisabled">رشته</label>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">لغو</button>
+                                        <button type="submit" class="btn btn-success">ویرایش</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Excel Download -->
+        {% for course in courses %}
+            <form action="{% url 'excel' %}" method="post">
+            {% csrf_token %}
+                <input type="hidden" name="course_title" value="{{ course.title }}">
+                <button class="btn btn-info" type="submit">دانلود خروجی اکسل</button>
+            </form>
+        {% endfor %}
+
+<script>
+    const imageUpload = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+
+    imageUpload.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container-fluid">
+      <!-- Left: Amirreza -->
+      <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+      <!-- Right: Buttons and Dropdown -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+              <!-- HighPressure Button -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'highpressure' %}">High Pressure</a>
+              </li>
+              <!-- Submersible Button -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'submersible' %}">Submersible</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav>
+
+
+<h3 class="text-center mt-5">Pipeline Specifications - Based on Selected Pipes</h3>
+
+{% for num in pipe_num %}
+
+    <!-- First Pipe Specifications -->
+    <h4 class="text-center mt-4">Specifications for Pipe {{ num }}</h4>
+    <form action="{% url 'submersible' %}" method="post" class="text-center mt-3 vh-100">
+        {% csrf_token %}
+        
+        <div class="container text-center mt-4">
+            <div class="row justify-content-center">
+                <!-- Pipe Material Options -->
+                <div class="col-md-5 mb-3">
+                    <div class="btn-group" role="group" aria-label="Pipe Material Selection">
+                        <input type="radio" class="btn-check" name="material{{num}}" id="polyethylene{{num}}" value="polyethylene" checked>
+                        <label class="btn btn-outline-primary" for="polyethylene{{num}}">Polyethylene</label>
+                        
+                        <input type="radio" class="btn-check" name="material{{num}}" id="steel{{num}}" value="steel">
+                        <label class="btn btn-outline-primary" for="steel{{num}}">Steel</label>
+                        
+                        <input type="radio" class="btn-check" name="material{{num}}" id="ductile_iron{{num}}" value="ductile_iron">
+                        <label class="btn btn-outline-primary" for="ductile_iron{{num}}">Ductile Iron</label>
+                        
+                        <input type="radio" class="btn-check" name="material{{num}}" id="asbestos{{num}}" value="asbestos">
+                        <label class="btn btn-outline-primary" for="asbestos{{num}}">Asbestos</label>
+                        
+                        <input type="radio" class="btn-check" name="material{{num}}" id="grp{{num}}" value="grp">
+                        <label class="btn btn-outline-primary" for="grp{{num}}">GRP</label>
+                    </div>
+                </div>
+
+                <!-- Pipe Specifications Input Fields -->
+                <div class="col-md-5">
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Pipe Diameter (mm)</span>
+                        <input type="text" name="pipe_diameter{{num}}" class="form-control" placeholder="Enter diameter" required>
+                    </div>
+                    
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Pipe Age (Years)</span>
+                        <input type="text" name="pipe_age{{num}}" class="form-control" placeholder="Enter age" required>
+                    </div>
+                    
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text">Pipe Length (m)</span>
+                        <input type="text" name="pipe_length{{num}}" class="form-control" placeholder="Enter length" required>
+                    </div>
+
+                    <div class="input-group input-group-sm mb-3">
+                        <span class="input-group-text" id="heyzen-coefficient-label">Heyzen Coefficient</span>
+                        <input type="number" name="pipe_heyzen{{num}}" class="form-control" placeholder="Enter coefficient" aria-label="Heyzen Coefficient" aria-describedby="heyzen-coefficient-label">
+                      </div>
+                </div>
+            </div>
+        </div>
+
+{% endfor %}
+
+    <button type="submit" class="btn btn-primary mt-3">Confirm Loss</button>
+</form>
+
+
+{% endblock %}

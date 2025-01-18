@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container-fluid">
+      <!-- Left: Amirreza -->
+      <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+      <!-- Right: Buttons and Dropdown -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+              <!-- HighPressure Button -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'highpressure' %}">High Pressure</a>
+              </li>
+              <!-- Submersible Button -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'submersible' %}">Submersible</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav>
+
+<!-- Form -->
+<form action="{% url 'submersible_calculation' %}" method="post" class="vh-100" style="text-align: center; margin-top: 80px;">
+  <h3>Specifications</h3>
+  {% csrf_token %}
+  <div class="container text-center" style="margin-top: 20px; max-width: 600px;">
+
+    <!-- Flow Rate, Dynamic Well Level, and Pump Height -->
+    <div class="row mb-3">
+      <div class="col-md-4 border p-2 input-group">
+        <span class="input-group-text" id="flow-rate-label">Flow Rate</span>
+        <input type="text" name="flow" class="form-control" placeholder="Enter flow rate" aria-label="Flow Rate" value="{{ debi }}" required>
+        <span class="input-group-text">lit/s</span>
+      </div>
+      <div class="col-md-4 border p-2 input-group">
+        <span class="input-group-text" id="well-level-label">Dynamic Well Level</span>
+        <input type="text" name="well" class="form-control" placeholder="Enter well level" aria-label="Dynamic Well Level" value="{{ well }}" required>
+        <span class="input-group-text">m</span>
+      </div>
+      <div class="col-md-4 border p-2 input-group">
+        <span class="input-group-text" id="pump-height-label">Pump Height</span>
+        <input type="text" name="height" class="form-control" placeholder="Enter pump height" aria-label="Pump Height" value="{{ height }}" required>
+        <span class="input-group-text">m</span>
+      </div>
+    </div>
+
+    <!-- Pump Distance, Heyzen Coefficient, and Pipe Loss -->
+    <div class="row mb-3">
+      <div class="col-md-4 border p-2 input-group">
+        <span class="input-group-text" id="distance-label">Pump to Panel Distance</span>
+        <input type="text" name="distance" class="form-control" placeholder="Enter distance" aria-label="Pump to Panel Distance" value="{{ distance }}" required>
+        <span class="input-group-text">m</span>
+      </div>
+      <div class="col-md-4 border p-2 input-group">
+        <span class="input-group-text" id="pipe-loss-label">Pipe Loss</span>
+        <input type="text" name="loss" class="form-control" placeholder="Enter pipe loss" aria-label="Pipe Loss" value="{{ hf }}">
+        <span class="input-group-text">m</span>
+      </div>
+    </div>
+
+    <!-- Submit Buttons -->
+    <div class="row">
+      <div class="col">
+        <input type="submit" class="btn btn-primary w-100" value="Calculate Loss" formaction="{% url 'submersible_pipe_num' %}">
+      </div>
+      <div class="col">
+        <input type="submit" class="btn btn-primary w-100" value="Select Pump">
+      </div>
+    </div>
+    
+  </div>
+</form>
+
+{% endblock %}

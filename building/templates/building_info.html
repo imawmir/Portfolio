@@ -1,0 +1,313 @@
+{% extends "home.html" %}
+{% block content %}
+{% load humanize %}
+<html lang="en" dir="rtl">
+
+<head>
+    <style>
+        .table-container {
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px 12px;
+            border: 1px solid;
+            text-align: left;
+        }
+
+        thead {
+            top: 0;
+        } 
+    </style>
+</head>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <!-- Left: Amirreza -->
+            <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+            <!-- Right: Buttons and Dropdown -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'building_main' %}">خانه</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'buildings' %}">ساختمان ها</a>
+                    </li>
+                    <!-- Dropdown Menu -->
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        مخارج
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          {% for building in buildings %}
+                              
+                              <li class="submenu-item">
+                                  <li><a class="dropdown-item" href="{% url 'building_info' building.id %}">{{building.title}}</a></li>
+                              </li>
+  
+                          {% endfor %}
+                      </ul>
+                  </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <img src="{{ building.image.url }}" class="img-fluid rounded mt-3" alt="hani be">
+
+    <div class="row mt-4">
+        <div class="col">
+            {# RADIO GROUP #}
+            <form action="{% url 'sorted_spent' %}" method="post">
+                {% csrf_token %}
+
+                <div class="btn-group" role="group" aria-label="Basic radio toggle button group" name="category">
+                    <input type="radio" class="btn-check" name="options" id="salary" autocomplete="off" value="دستمزد">
+                    <label class="btn btn-outline-secondary" for="salary">دستمزد</label>
+
+                    <input type="radio" class="btn-check" name="options" id="buy" autocomplete="off" value="خرید">
+                    <label class="btn btn-outline-secondary" for="buy">خرید</label>
+
+                    <input type="radio" class="btn-check" name="options" id="nezam" autocomplete="off" value="نظام مهندسی">
+                    <label class="btn btn-outline-secondary" for="nezam">نظام مهندسی</label>
+
+                    <input type="radio" class="btn-check" name="options" id="municipality" autocomplete="off" value="شهرداری">
+                    <label class="btn btn-outline-secondary" for="municipality">شهرداری</label>
+
+                    <input type="radio" class="btn-check" name="options" id="insurance" autocomplete="off" value="بیمه">
+                    <label class="btn btn-outline-secondary" for="insurance">بیمه</label>
+
+                    <input type="hidden" name="building_name" value="{{ building_name }}">
+                </div>
+
+                <button class="btn btn-outline-primary" type="submit">لیست کن</button>
+
+            </form>
+        </div>
+
+        <div class="col">
+                <form class="form-inline" action="{% url 'search_spent' %}" method="post">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col">
+                            <input class="form-control mr-sm-2" type="text" name="search" placeholder="جستجو" aria-label="Search">
+                        </div>
+                        <div class="col">
+                            <input type="hidden" name="building_name" value="{{ building_name }}">
+                            <button class="btn btn-outline-primary" type="submit">جستجو</button>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>
+
+    <div class="table-responsive mt-3 vh-100" style="max-height: 400px; overflow-y: auto;">
+      <table class="text-light">
+          <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">دسته بندی</th>
+                    <th scope="col">عنوان</th>
+                    <th scope="col">ساختمان</th>
+                    <th scope="col">تاریخ</th>
+                    <th scope="col">پرداخت کننده</th>
+                    <th scope="col">قیمت</th>
+                  </tr>
+          </thead>
+          <tbody>
+              {% for item in building_spent %}
+                  <tr class="text-light">
+                    <td><a class="btn btn-outline-primary" href="{% url 'spent_info' item.id %}">{{item.id}}</a></td>
+                    <td>{{item.category}}</td>
+                    <td class="fw-bold">{{item.subject}}</td>
+                    <td>{{item.building}}</td>
+                    <td>{{item.date}}</td>
+                    <td>{{item.payer}}</td>
+                      <td>ريال {{ item.price|intcomma }}</td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </div>
+
+    <div class="row">
+      <h3 class="mt-3 col">جمع پرداختی ها:</h3>
+      <h3 class="mt-3 col">{{ total_price|intcomma }}</h3>
+    </div>
+    
+
+    <!-- Add Modal -->
+    <button
+    type="button"
+    class="btn btn-primary fw-bold animate-text-right"
+    data-bs-toggle="modal"
+    data-bs-target="#addModal"
+    >
+      افزودن
+    </button>
+
+    <div
+      class="modal fade text-dark"
+      id="addModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+    <!-- modal-dialog -->
+    <div class="modal-dialog">
+    <!-- modal-content -->
+    <div class="modal-content">
+    <!-- modal-header -->
+    <div class="modal-header">
+    <!-- Close modal button -->
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <!-- modal-body -->
+                <form class="modal-body" action="{% url 'spent_update' %}" method="post">
+                  <p class="fs-5">لطفا فرم را پر کنید</p>
+                  {% csrf_token %}
+
+                  <div class="form-floating mb-3">
+                    <select class="btn btn-primary dropdown-toggle" name="category">
+                      <option value="خرید">خرید</option>
+                      <option value="دستمزد">دستمزد</option>
+                      <option value="شهرداری">شهرداری</option>
+                      <option value="نظام مهندسی">نظام مهندسی</option>
+                      <option value="بیمه">بیمه</option>
+                    </select>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <span class="input-group-text">عنوان</span>
+                    <input type="text" class="form-control" name="subject" required>
+                    <input type="hidden" name="building" value="{{ building_name }}">
+                  </div>
+                  <div class="form-floating mb-3">
+                    <span class="input-group-text">تاریخ</span>
+                    <input type="text" class="form-control" name="date" required>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <span class="input-group-text">پرداخت کننده</span>
+                    <input type="text" class="form-control" name="payer" required>
+                  </div>
+                  <div class="form-floating mb-3">
+                    <span class="input-group-text">قیمت</span>
+                    <input type="text" class="form-control" name="price" required>
+                  </div>
+                  <!-- modal-footer -->
+                <div class="modal-footer">
+                  <!-- Actions  -->
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                  >
+                    لغو
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    ذخیره
+                  </button>
+                </div>
+
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+
+    <!-- Delete Modal -->
+    <button
+    type="button"
+    class="btn btn-danger fw-bold animate-text-right"
+    data-bs-toggle="modal"
+    data-bs-target="#deleteModal"
+    >
+      حذف
+    </button>
+
+
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+    <!-- modal-dialog -->
+    <div class="modal-dialog">
+    <!-- modal-content -->
+    <div class="modal-content">
+    <!-- modal-header -->
+    <div class="modal-header">
+    <!-- modal-title -->
+      <h5 class="modal-title" id="exampleModalLabel"><i class="bi bi-trash fs-3">حذف مورد</i></h5>
+    <!-- Close modal button -->
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <!-- modal-body -->
+                <form class="modal-body" action="{% url 'spent_update' %}" method="post">
+                  <p class="fs-5">لطفا آی دی را وارد کنید</p>
+                  {% csrf_token %}
+
+
+                  <div class="form-floating mb-3">
+                    <span class="input-group-text">ID</span>
+                    <input type="text" class="form-control" name="delete_id" required>
+                  </div>
+
+                  <!-- modal-footer -->
+                <div class="modal-footer">
+                  <!-- Actions  -->
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                  >
+                    لغو
+                  </button>
+                  <button type="submit" class="btn btn-primary">
+                    ذخیره
+                  </button>
+                </div>
+
+                </form>
+
+              </div>
+            </div>
+          </div>
+
+    <br>
+
+    <!-- Download -->
+        <form class="mt-1" action="{% url 'generate_excel' %}" method="post">
+        {% csrf_token %}
+            <input type="hidden" name="building_name" value="{{ building_name }}">
+            <button class="btn btn-primary" type="submit">دانلود خروجی اکسل</button>
+        </form>
+
+{% endblock %}

@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container-fluid">
+      <!-- Left: Amirreza -->
+      <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+      <!-- Right: Buttons and Dropdown -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+              <!-- HighPressure Button -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'highpressure' %}">High Pressure</a>
+              </li>
+              <!-- Submersible Button -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'submersible' %}">Submersible</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav>
+
+<!-- Messsage -->
+ {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+  {% endif %}
+
+<!-- Form -->
+<form action="{% url 'highpressure_calculation' %}" method="post" class="vh-100" style="text-align: center; margin-top: 80px;">
+  <h3>Specifications</h3>
+  {% csrf_token %}
+  <div class="container text-center" style="margin-top: 20px; max-width: 600px;">
+
+    <!-- Flow Rate and Pump Height -->
+    <div class="row mb-3">
+      <div class="col-md-6 border p-2 input-group">
+        <span class="input-group-text" id="flow-rate-label">Flow Rate</span>
+        <input type="text" name="debi" class="form-control" placeholder="Enter flow rate" aria-label="Flow Rate" aria-describedby="flow-rate-label" required value="{{ debi }}">
+        <span class="input-group-text">lit/s</span>
+      </div>
+      <div class="col-md-6 border p-2 input-group">
+        <span class="input-group-text" id="height-label">Pump Height</span>
+        <input type="text" name="height" class="form-control" placeholder="Enter pump height" aria-label="Pump Height" aria-describedby="height-label" required value="{{ height }}">
+        <span class="input-group-text">m</span>
+      </div>
+    </div>
+
+    <!-- Pipe Loss -->
+    <div class="row mb-3">
+      <div class="col border p-2 input-group">
+        <span class="input-group-text" id="pipe-loss-label">Pipe Loss</span>
+        <input type="text" name="oft" class="form-control" placeholder="Enter pipe loss" aria-label="Pipe Loss" aria-describedby="pipe-loss-label" value="{{ hf }}">
+        <span class="input-group-text">m</span>
+      </div>
+    </div>
+
+    <!-- Motor Speed Selection -->
+    <div class="row mb-4 align-items-center">
+      <fieldset class="col-12">
+          <legend class="h4 mb-3">Motor Speed Selection</legend>
+          <div class="form-check form-check-inline">
+              <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="motor" 
+                  id="motor1450" 
+                  value="1450" 
+                  checked>
+              <label class="form-check-label btn btn-outline-secondary" for="motor1450">
+                  1450
+              </label>
+          </div>
+          <div class="form-check form-check-inline">
+              <input 
+                  class="form-check-input" 
+                  type="radio" 
+                  name="motor" 
+                  id="motor2900" 
+                  value="2900">
+              <label class="form-check-label btn btn-outline-secondary" for="motor2900">
+                  2900
+              </label>
+          </div>
+      </fieldset>
+    </div>
+
+    <!-- Submit Buttons -->
+    <div class="row">
+      <div class="col">
+        <input type="submit" class="btn btn-primary w-100" value="Calculate Loss" formaction="{% url 'highpressure_pipe_num' %}">
+      </div>
+      <div class="col">
+        <input type="submit" class="btn btn-primary w-100" value="Select Pump">
+      </div>
+    </div>
+    
+  </div>
+</form>
+
+<!-- Optional CSS for Styling -->
+<style>
+  fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+  }
+
+  .form-check-input {
+      display: none;
+  }
+
+  .form-check-label {
+      padding: 8px 16px;
+      cursor: pointer;
+  }
+
+  .form-check-input:checked + .form-check-label {
+      background-color: #6c757d;
+      color: white;
+  }
+
+  .form-check-label:hover {
+      background-color: #e9ecef;
+  }
+</style>
+
+{% endblock %}

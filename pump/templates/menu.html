@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+  <div class="container-fluid">
+      <!-- Left: Amirreza -->
+      <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+      <!-- Right: Buttons and Dropdown -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+          <ul class="navbar-nav">
+              <!-- HighPressure Button -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'highpressure' %}">High Pressure</a>
+              </li>
+              <!-- Submersible Button -->
+              <li class="nav-item">
+                  <a class="nav-link" href="{% url 'submersible' %}">Submersible</a>
+              </li>
+          </ul>
+      </div>
+  </div>
+</nav>
+
+<div class="container text-center" style="margin-top: 85px;">
+  
+  <h2 style="margin-bottom: 10px;">Choose your <span class="text-primary">Pump</span> model</h2>   
+    <div class="row">
+      <div class="col">
+
+        <div class="card w-100 btn btn-light" style="width: 15rem; margin-bottom: 20px;">
+          <div class="card-header">Submersible</div>
+          <a href="{% url 'submersible' %}"><img class="w-100" src="{% static 'assets/pump/submersible_wallpaper.jpg' %}" alt="IMAGE ERROR"></a>
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">
+              With supporting text below as a natural lead-in to additional
+            content.
+            </p> 
+          </div>
+        </div>
+      </div>
+      <div class="col">
+
+        <div class="card w-100 btn btn-light" style="width: 15rem; margin-bottom: 20px;">
+          <div class="card-header">High Pressure</div>
+          <a href="{% url 'highpressure' %}"><img class="w-100" src="{% static 'assets/pump/highpressure_wallpaper.jpg' %}" alt="IMAGE ERROR"></a>
+          <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">
+              With supporting text below as a natural lead-in to additional
+            content.
+            </p> 
+          </div>
+        </div>
+      </div>
+</div>
+
+{% endblock %}

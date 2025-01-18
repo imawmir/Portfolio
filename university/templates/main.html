@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<html lang="en" dir="rtl">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <!-- Left: Amirreza -->
+            <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+            <!-- Right: Buttons and Dropdown -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'courses' %}">دوره ها</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">ارتباط با ما</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="bg-white mt-2" style="background-image: url({% static "assets/UMA.jpg" %}); background-size: cover;">
+
+    {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+    {% endif %}
+
+    </header>
+
+    <div class="container bg-secondary">
+        <div class="row">
+          <p class="col h3 text-center">تعداد دوره ها</p>
+          <p class="col h3 text-center">تعداد دانشجویان</p>
+        </div>
+
+        <div class="row">
+          <p class="col h3 text-center">{{ course_counts }}</p>
+          <p class="col h3 text-center">{{ student_counts }}</p>
+        </div>
+    </div>
+
+
+    <section class="container mb-5 ot-4">
+        <p class="text-center h3">لیست دوره ها</p>
+        <div class="col-12 my-5 align-items-center">
+          <div class="row gy-4 row-cols-1 row-cols-sm-2 row-cols-md-3 text-center text-sm-start">
+
+              {% for course in courses %}
+                <div class="card col ms-3 text-center" style="width: 18rem; color: black;">
+                    <img class="card-img-top" src={{ course.image.url }}>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ course.title }}</h5>
+                        <a class="btn btn-warning w-100" href="{% url 'enroll' course.id %}">شرکت در دوره</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">شروع: {{ course.start_date }}</li>
+                        <li class="list-group-item">پایان: {{ course.end_date }}</li>
+                    </ul>
+                </div>
+            {% endfor %}
+
+          </div>
+        </div>
+    </section>
+
+    <section class="container mb-5 ot-4">
+        <p class="text-center h3">اخبار دانشگاه</p>
+        <div class="col-12 my-5 align-items-center">
+          <div class="row gy-4 row-cols-1 row-cols-sm-2 row-cols-md-3 text-center text-sm-start">
+
+              {% for news in news %}
+                  <div class="card col ms-3 text-center" style="width: 18rem;">
+                    <img class="card-img-top" src={{ news.image.url }}>
+                    <div class="card-body">
+                        <h5 class="card-title text-dark">{{ news.title }}</h5>
+                        <a class="btn btn-warning w-100" href="{% url 'news_info' news.id %}">بیشتر</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">تاریخ انتشار: {{ news.published_at }}</li>
+                    </ul>
+                </div>
+            {% endfor %}
+
+          </div>
+        </div>
+    </section>
+
+        <div>
+          <p class="h3">ثبت دوره جدید</p>
+              <form action="{% url 'add_course' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-floating mb-3 text-light mt-6">
+                  <label class="h5" style="color: white" for="floatingTextareaDisabled text-white">عنوان</label>
+                  <input type="text" class="form-control" name="title" required>
+                </div>
+                <div class="form-floating mb-3 text-light mt-6">
+                  <label class="h5" style="color: white" for="floatingTextareaDisabled text-white">توضیحات</label>
+                  <input type="text" class="form-control" name="description" required>
+                </div>
+                <div class="form-floating mb-3 text-light mt-6">
+                  <label class="h5" style="color: white" for="floatingTextareaDisabled text-white">تاریخ شروع</label>
+                  <input type="text" class="form-control" name="start" required>
+                </div>
+                <div class="form-floating mb-3 text-light mt-6">
+                  <label class="h5" style="color: white" for="floatingTextareaDisabled text-white">تاریخ پایان</label>
+                  <input type="text" class="form-control" name="end" required>
+                </div>
+                <div class="mb-3">
+                  <label class="h5" style="color: white" for="floatingTextareaDisabled text-white">تصویر</label>
+                  <input type="file" class="form-control" name="image" required>
+                </div>
+                <button class="btn btn-warning mb-5 mt-3" type="submit">افزودن</button>
+              </form>
+        </div>
+
+        <div>
+          <p class="h3">ثبت خبر جدید</p>
+              <form action="{% url 'add_news' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-floating mb-3 text-light mt-6">
+                  <label class="h5" style="color: white" for="floatingTextareaDisabled text-white">عنوان</label>
+                  <input type="text" class="form-control" name="news_title" required>
+                </div>
+                <div class="form-floating mb-3 text-light mt-6">
+                  <label class="h5" style="color: white" for="floatingTextareaDisabled text-white">توضیحات</label>
+                  <input type="text" class="form-control" name="news_content" required>
+                </div>
+                <div class="mb-3">
+                  <label class="h5" style="color: white" for="floatingTextareaDisabled text-white">تصویر</label>
+                  <input type="file" class="form-control" name="news_image" required>
+                </div>
+                <button class="btn btn-warning mb-5 mt-3" type="submit">افزودن</button>
+              </form>
+        </div>
+
+
+{% endblock %}

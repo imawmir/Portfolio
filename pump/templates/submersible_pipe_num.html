@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <!-- Left: Amirreza -->
+        <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+  
+        <!-- Right: Buttons and Dropdown -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- HighPressure Button -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'highpressure' %}">High Pressure</a>
+                </li>
+                <!-- Submersible Button -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'submersible' %}">Submersible</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4 vh-100" >
+    <form action="{% url 'submersible_oft' %}" method="POST" class="text-center">
+        {% csrf_token %}
+        <h3>Enter the Number of Pipes</h3>
+            
+        <div class="input-group mb-3" style="max-width: 300px; margin: 0 auto;">
+            <input type="number" class="form-control" name="pipe_num" placeholder="Number of Pipes" aria-label="Number of Pipes" aria-describedby="pipe-count-label" required>
+        </div>
+            
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+{% endblock %}

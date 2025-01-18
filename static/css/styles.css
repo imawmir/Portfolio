@@ -1,0 +1,99 @@
+ /* Custom Navbar Styling */
+ .navbar {
+    background-color: #243b55; /* Dark background color */
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #28a745 !important; /* Green color for "Amirreza" */
+}
+
+.navbar-nav .nav-link {
+    color: white !important; /* White color for links */
+}
+
+.navbar-nav .dropdown-menu {
+    background-color: #001830; /* Dark background for dropdown */
+}
+
+.navbar-nav .dropdown-item {
+    color: white; /* White text in dropdown */
+}
+
+.navbar-nav .dropdown-item:hover {
+    background-color: #28a745; /* Green highlight on hover */
+}
+
+.navbar.fixed-top {
+    box-shadow: 0 4px 6px rgba(0, 22, 68, 0.1); /* Shadow for better visibility */
+}
+
+.navbar .nav-link img {
+    border: 2px solid #ccc;
+    transition: transform 0.2s ease;
+}
+
+.navbar .nav-link img:hover {
+    transform: scale(1.05);
+    border-color: #48c9b0;
+}
+
+
+header {
+    position: relative;
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header h1 {
+    font-size: 4rem;
+    color: white;
+}
+
+header .btn {
+    margin-top: 20px;
+}
+
+section {
+    padding: 60px 0;
+}
+
+footer {
+    background-color: #111;
+    padding: 20px 0;
+}
+
+h2 span, h3 span {
+    color: #28a745;
+}
+
+.progress {
+    height: 25px;
+    border-radius: 15px;
+}
+
+.progress-bar {
+    font-size: 1rem;
+    line-height: 25px;
+    border-radius: 15px;
+    animation: grow 2s ease-in-out;
+}
+
+@keyframes grow {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%; /* مقدار واقعی هر نوار در HTML تنظیم شده */
+    }
+}
+
+section {
+    background: linear-gradient(to right, #141e30, #243b55);
+}
+

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mx-auto text-center">
+    <form method="post" style="margin-top: 70px;">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="username" id="username" placeholder="نام کاربری">
+        <input type="text" class="form-control" name="phone" id="phone" placeholder="09121234567">
+        <input type="password" class="form-control" name="password" id="password" placeholder="رمز ورود">
+        <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="تکرار رمز ورود">
+        <button type="submit" class="btn btn-primary">ثبت نام</button>
+    </form>
+</div>
+
+{% endblock content %}

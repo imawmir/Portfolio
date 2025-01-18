@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand fw-bold" href="{% url 'index' %}">ARSeyedi</a>
+
+        <!-- Toggler Button for Mobile -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Links and Buttons -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav align-items-center">
+                
+                <!-- Inbox Notification Button -->
+                {% if user.is_authenticated %}
+                <li class="nav-item me-3">
+                    <a class="btn btn-outline-light position-relative d-flex align-items-center" href="{% url "cart" %}">
+                        <i class="fas fa-shopping-cart me-2"></i> Cart
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ order_count }}
+                        </span>
+                    </a>
+                </li>
+
+                    <!-- Admin Panel for Superusers -->
+                    {% if user.is_superuser %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-cogs me-1"></i> Admin Panel
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item d-flex align-items-center" href="{% url 'store_products' %}">
+                                    <i class="fas fa-box me-2"></i> Products Management
+                                </a></li>
+                                <li><a class="dropdown-item d-flex align-items-center" href="{% url 'store_users' %}">
+                                    <i class="fas fa-users me-2"></i> Clients Management
+                                </a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                <!-- Home Link -->
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center" href="{% url 'store_main' %}">
+                        <i class="fas fa-home me-1"></i> Home
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container mt-5 vh-100">
+    <div class="row g-4">
+        <!-- Product Images -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-4">
+                    {% for product in product %}
+                        <img class="img-fluid rounded mb-3" src="{{ product.image.url }}" alt="{{ product.title }}" style="width: 100%; height: auto; object-fit: cover;">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Product Details Table -->
+        <div class="col-md-6">
+            <div class="card border-0 shadow-lg h-100">
+                <div class="card-body p-4">
+                    <h4 class="card-title text-primary mb-4">Product Details</h4>
+                    <table class="table table-hover">
+                        <tbody>
+                            {% for product in product %}
+                                <tr>
+                                    <th scope="row" class="text-secondary">Title</th>
+                                    <td>{{ product.title }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-secondary">Price</th>
+                                    <td>${{ product.price }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-secondary">Description</th>
+                                    <td>{{ product.description }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-secondary">Category</th>
+                                    <td>{{ product.category }}</td>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="text-secondary">Availability</th>
+                                    <td>
+                                        {% if product.inventory == 0 %}
+                                            <span class="text-danger fw-bold">Out of Stock</span>
+                                        {% else %}
+                                            <a class="btn btn-primary btn-sm" href="{% url 'add_to_cart' product.pk %}">Add to Cart</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- CSS for custom styling -->
+<style>
+    /* Navbar Styles */
+    .navbar {
+        background-color: rgba(0, 0, 0, 0.8); /* Transparent effect */
+    }
+
+    /* Badge Styling */
+    .badge {
+        font-size: 0.75rem;
+        padding: 0.4em 0.5em;
+    }
+
+    /* Dropdown Menu Style */
+    .dropdown-menu {
+        background-color: #333;
+        border: none;
+        box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Links Styling */
+    .nav-link, .dropdown-item {
+        color: #ddd !important;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-link:hover, .dropdown-item:hover {
+        color: #fff !important;
+        transform: scale(1.05);
+    }
+
+    /* Icon Color */
+    .nav-link i, .dropdown-item i {
+        color: #bbb;
+        transition: color 0.2s ease;
+    }
+
+    .nav-link:hover i, .dropdown-item:hover i {
+        color: #fff;
+    }
+
+    /* Image Card Styling */
+    .card-img-top {
+        border-radius: 10px;
+        object-fit: cover;
+        transition: transform 0.2s ease;
+    }
+    .card-img-top:hover {
+        transform: scale(1.05);
+    }
+
+    /* Table Styling */
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+    th {
+        font-weight: 500;
+        color: #6c757d;
+    }
+    td {
+        font-weight: 600;
+        color: #343a40;
+    }
+</style>
+
+<!-- Font Awesome (Optional for Icons) -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+{% endblock %} 

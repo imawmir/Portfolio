@@ -1,0 +1,158 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <!-- Left: Amirreza -->
+        <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+        <!-- Right: Buttons and Dropdown -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- HighPressure Button -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'highpressure' %}">High Pressure</a>
+                </li>
+                <!-- Submersible Button -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'submersible' %}">Submersible</a>
+                </li>
+                <!-- Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Work Samples
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        {% for ws in worksamples %}
+                            <li>
+                                <a class="dropdown-item" href="{{ ws.url }}">{{ ws.title }} 
+                                <img src="{{ ws.image.url }}" class="rounded" style="height: 40px; width: 40px;"></a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center mt-3">
+    <div class="d-flex justify-content-center">
+        <div class="text-center">
+                <h1 class="mx-auto my-0 text-uppercase">PUMP</h1>
+                <h3 class="mx-auto mt-2 mb-5">Choose <span class="text-primary">Yours</span></h3>
+                <a class="btn btn-primary" href="{% url 'menu' %}">Choose</a>
+        </div>
+    </div>
+</div>
+
+<!-- About-->
+<section class="about-section text-center" id="history">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8">
+                <h2 class="mb-4">Who created <span class="text-primary">Pump</span>?</h2>
+                <h5 class="text-white">
+                    The basic design of the pump as we know it today has evolved over <span class="text-primary">thousands</span> of years and involves contributions 
+                    from multiple inventors and engineers across various civilizations. Here are some major milestones in 
+                    the development of the pump:
+
+                </h5>
+                <ol>
+                    <li class="m-3">
+                        Ancient Egyptians (circa 2000 BCE) – Early Egyptians are believed to have used a primitive water-lifting device 
+                        called a "shaduf," which consisted of a long pole balanced on a fulcrum with a bucket at one end. It wasn't a 
+                        pump in the modern sense but laid the groundwork for water-lifting technology.
+                    </li>
+                    <li class="m-3">
+                        Archimedes (287-212 BCE) – The Greek mathematician and engineer Archimedes is credited with creating the "Archimedean screw," 
+                        one of the earliest pump designs still used today for specific applications. The Archimedean screw is a helical tube that can 
+                        move water when rotated, and it remains influential in designing modern pumps.
+                    </li>
+                    <li class="m-3">
+                        Ctesibius (circa 285-222 BCE) – The Greek engineer Ctesibius is known for inventing the "force pump," which used a piston to 
+                        move water through a tube, creating one of the earliest reciprocating pumps. The design is a closer ancestor to modern mechanical pumps.
+                    </li>
+                    <li class="m-3">
+                        Medieval Islamic Engineers (8th-13th centuries) – Islamic scholars and engineers made significant advancements in hydraulic and 
+                        mechanical engineering, improving upon earlier pump designs and creating more complex systems, especially for agriculture and water 
+                        distribution.
+                    </li>
+                    <li class="m-3">
+                        The Industrial Revolution (18th-19th centuries) – The modern pump took shape with the Industrial Revolution, as inventors like 
+                        Thomas Savery and James Watt developed steam pumps to dewater mines and supply water to cities. This era marked a major leap forward in
+                        pump technology, bringing in piston-driven, centrifugal, and steam-powered pumps.
+                    </li>
+                    <li class="m-3">
+                        Centrifugal Pump – In the late 1600s, Denis Papin, a French-born physicist, made critical contributions to the development of the 
+                        centrifugal pump, which was refined in the 19th century with advancements in steam technology and mechanical engineering.
+                    </li>
+                    <h5 class="m-3">
+                        The modern pump industry was truly established during the 19th and 20th centuries, as mass manufacturing and new materials 
+                        (like stainless steel) enabled pumps to be used for a wide array of applications.
+                    </h5>
+                </ol>
+            </div>
+        </div>
+        <img class="img-fluid" src={% static 'assets/pump/bg-pump.jpg' %} alt="Image Error!" />
+    </div>
+</section>
+
+<!-- Projects-->
+<section class="projects-section bg-light" id="models">
+    <div class="container px-4 px-lg-5">
+        <!-- Featured Project Row-->
+        <div class="row gx-0 mb-4 mb-lg-5 align-items-center">
+            <div class="col-xl-8 col-lg-7"><img class="img-fluid mb-3 mb-lg-0" src={% static 'assets/pump/water.jpg' %} alt="Image Error!" /></div>
+            <div class="col-xl-4 col-lg-5">
+                <div class="featured-text text-center text-lg-left">
+                    <h5>Water</h5>
+                    <p class="mb-0">Water plays a very important role in the global economy. Nearly 70% of the freshwater consumed by humans 
+                        is used in agriculture. Fishing in both freshwater and saltwater is a primary source of income in many countries. 
+                        Many essential and consumer goods are transported via waterways using ships and boats. Large quantities of water and 
+                        steam are used in residential and industrial cooling and heating applications. Water is an excellent solvent for many 
+                        minerals and organic substances, making it highly useful for industrial and domestic uses such as cooking and cleaning. 
+                        Water, ice, and snow are integral to certain sports and recreational activities, such as swimming, boating, and skiing.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Project One Row-->
+        <div class="row gx-0 mb-5 mb-lg-0 justify-content-center">
+            <div class="col-lg-6"><img class="img-fluid" src={% static 'assets/pump/submersible_wallpaper.jpg' %} alt="Image Error!" /></div>
+            <div class="col-lg-6">
+                <div class="bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-left">
+                            <h4 class="text-white">Submersible</h4>
+                            <p class="mb-0 text-white-50">An example of where you can put an image of a project, or anything else, along with a description.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Project Two Row-->
+        <div class="row gx-0 justify-content-center">
+            <div class="col-lg-6"><img class="img-fluid" src={% static 'assets/pump/highpressure_wallpaper.jpg' %} alt="Image Error!" style="width: 1000px;"/></div>
+            <div class="col-lg-6 order-lg-first">
+                <div class="bg-black text-center h-100 project">
+                    <div class="d-flex h-100">
+                        <div class="project-text w-100 my-auto text-center text-lg-right">
+                            <h4 class="text-white">High-pressure</h4>
+                            <p class="mb-0 text-white-50">High-pressure pumps are designed to move fluids at significantly high pressures, making them essential for industrial applications like cleaning, descaling, and water jet cutting. They are engineered for durability and precision, ensuring consistent performance under extreme conditions.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

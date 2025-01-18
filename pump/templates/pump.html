@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid">
+        <!-- Left: Amirreza -->
+        <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+  
+        <!-- Right: Buttons and Dropdown -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <!-- HighPressure Button -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'highpressure' %}">High Pressure</a>
+                </li>
+                <!-- Submersible Button -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'submersible' %}">Submersible</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
+
+  <div class="container mt-5">
+    <!-- Pipe Diameters Section -->
+    <div class="text-center py-3 mb-4 border-bottom">
+        <h4 class="text-secondary mb-3">Pipe Diameters</h4>
+        {% for item in diameter %}
+            <p class="mb-1">Pipe {{ forloop.counter0|add:1 }} Diameter: <strong>{{ item }} mm</strong></p>
+        {% endfor %}
+    </div>
+
+    <!-- Pipe Cross-Sectional Areas Section -->
+    <div class="text-center py-3 mb-4 border-bottom">
+        <h4 class="text-secondary mb-3">Cross-Sectional Areas</h4>
+        {% for item in area %}
+            <p class="mb-1">Pipe {{ forloop.counter0|add:1 }} Area: <strong>{{ item }} m²</strong></p>
+        {% endfor %}
+    </div>
+
+    <!-- Pipe Lengths Section -->
+    <div class="text-center py-3 mb-4 border-bottom">
+        <h4 class="text-secondary mb-3">Pipe Lengths</h4>
+        {% for item in length %}
+            <p class="mb-1">Pipe {{ forloop.counter0|add:1 }} Length: <strong>{{ item }} m</strong></p>
+        {% endfor %}
+    </div>
+
+    <!-- Pipe Velocities Section -->
+    <div class="text-center py-3 mb-4 border-bottom">
+        <h4 class="text-secondary mb-3">Pipe Velocities</h4>
+        {% for item in velocity %}
+            <p class="mb-1">Pipe {{ forloop.counter0|add:1 }} Velocity: <strong>{{ item }} m/s</strong></p>
+        {% endfor %}
+    </div>
+
+    <!-- Pipe Pressure Drops Section -->
+    <div class="text-center py-3 mb-4 border-bottom">
+        <h4 class="text-secondary mb-3">Pressure Drops</h4>
+        {% for item in hf %}
+            <p class="mb-1">Pipe {{ forloop.counter0|add:1 }} Pressure Drop: <strong>{{ item }} Pa</strong></p>
+        {% endfor %}
+    </div>
+
+    <!-- Final Pump and Motor Specifications Section -->
+    <div class="text-center text-dark py-4 mt-4" style="border: 1px solid #ccc; background-color: #f9f9f9;">
+        <h4 class="text-dark mb-3">Pump and Motor Specifications</h4>
+        <p>Type of Pump (P): <strong>{{ name }}</strong></p>
+        <p>Pumping Height (H): <strong>{{ height }}</strong></p>
+        <p>Flow Rate (Q): <strong>{{ flow }}</strong></p>
+        <p>Number of Stages (N): <strong>{{ stage }}</strong></p>
+        <p>Nominal Power (KW): <strong>{{ power }}</strong></p>
+    </div>
+</div>
+
+
+
+{% endblock %}

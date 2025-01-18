@@ -1,0 +1,118 @@
+{% extends 'Base.html' %}
+{% block content %}
+<html lang="en" dir="rtl">
+
+<!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container-fluid">
+            <!-- Left: Amirreza -->
+            <a class="navbar-brand" href="{% url 'index' %}">ARSeyedi</a>
+
+            <!-- Right: Buttons and Dropdown -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'courses' %}">دوره ها</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'index' %}">ارتباط با ما</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% for article in news %}
+        <div class="text-center mt-3">
+            <img src="{{ article.image.url }}" class="rounded img-fluid" alt="NO IMAGE!">
+        </div>
+        <p class="h1 mt-5">{{ article.title }}</p> <!-- Corrected Typo -->
+        <p class="h3 mt-5">{{ article.content }}</p>
+        <p class="h5 mt-4">تاریخ انتشار: {{ article.published_at }}</p>
+        <a class="btn btn-danger mt-1" href="{% url 'news_delete' article.id %}">حذف</a>
+        <!-- Add Modal -->
+        <button
+            type="button"
+            class="btn btn-primary mt-1"
+            data-bs-toggle="modal"
+            data-bs-target="#editModal{{ article.id }}"
+        >
+            ویرایش
+        </button>
+
+        <div
+            class="modal fade"
+            id="editModal{{ article.id }}"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title text-dark" id="exampleModalLabel"><i class="bi bi-building">ویرایش خبر</i></h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        ></button>
+                    </div>
+                    <form class="modal-body text-dark" action="{% url 'news_update' article.id %}" method="post"
+                          enctype="multipart/form-data">
+                        <p class="fs-5">لطفا تغییرات را اعمال کنید</p>
+                        {% csrf_token %}
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="title" value="{{ article.title }}" required>
+                            <label for="floatingTextareaDisabled">عنوان</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="content" value="{{ article.content }}" required>
+                            <label for="floatingTextareaDisabled">متن</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" name="published_at" value="{{ article.published_at }}" required>
+                            <label for="floatingTextarea2Disabled">تاریخ انتشار</label>
+                        </div>
+                        <div class="mb-3">
+                            <img id="imagePreview{{ article.id }}" src="{{ article.image.url }}" alt="Default Image" width="200" class="mb-2">
+                            <input type="file" class="form-control" name="image" id="imageUpload{{ article.id }}" accept="image/*">
+                        </div>
+                        <div class="modal-footer">
+                            <button
+                                type="button"
+                                class="btn btn-danger"
+                                data-bs-dismiss="modal"
+                            >
+                                لغو
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                ویرایش
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <script>
+        document.querySelectorAll('[id^="imageUpload"]').forEach((imageUpload) => {
+            const imagePreview = document.getElementById(`imagePreview${imageUpload.id.replace('imageUpload', '')}`);
+            imageUpload.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+{% endblock %}
