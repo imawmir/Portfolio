@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-^assvkc1(_6%723*7_3$$(gbls%ci_a=n*p8!eil3+8r@88z16
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["arseyedi.liara.run"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
