@@ -7,10 +7,6 @@
     {
       "name": "sqlite",
       "mountTo": "data"
-    },
-  "env": 
-    {
-       "DEBUG": "true"
     }
   ]
 }
