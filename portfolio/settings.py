@@ -26,7 +26,7 @@ MEDIA_DIR = os.path.join(BASE_DIR, "Media")
 SECRET_KEY = "django-insecure-^assvkc1(_6%723*7_3$$(gbls%ci_a=n*p8!eil3+8r@88z16"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "false").lower() == "true"
+DEBUG = True
 
 ALLOWED_HOSTS = ["arseyedi.liara.run"]
 
