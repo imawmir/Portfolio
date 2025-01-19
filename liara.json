@@ -7,4 +7,9 @@
     "modifySettings": true,
     "geospatial": false
   }
+  "disks":[
+    {
+      "name": "sqlite",
+      "mountTo": "data"
+    }
 }
